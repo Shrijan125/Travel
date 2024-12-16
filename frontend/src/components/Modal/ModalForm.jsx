@@ -1,25 +1,29 @@
-import React, { useState } from "react";
-import { useForm } from "react-hook-form";
-import { z } from "zod";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { jsPDF } from "jspdf";
+import React, { useState } from 'react';
+import { useForm } from 'react-hook-form';
+import { z } from 'zod';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { jsPDF } from 'jspdf';
+import axios from 'axios';
+import { BASE_URL } from '../../contants';
+import toast from 'react-hot-toast';
 
 const bookingSchema = z.object({
-  name: z.string().min(1, "Name is required"),
-  email: z.string().email("Invalid email address"),
+  name: z.string().min(1, 'Name is required'),
+  email: z.string().email('Invalid email address'),
   phone: z
     .string()
-    .min(10, "Phone number must be at least 10 digits")
-    .max(15, "Phone number cannot exceed 15 digits"),
-  travelers: z.number().min(1, "At least one traveler is required").nonnegative(),
+    .min(10, 'Phone number must be at least 10 digits')
+    .max(15, 'Phone number cannot exceed 15 digits'),
+  travelers: z
+    .number()
+    .min(1, 'At least one traveler is required')
+    .nonnegative(),
   specialRequests: z.string().optional(),
 });
 
-const ModalForm = ({ closeModal, totalprice}) => {
-
+const ModalForm = ({ closeModal, totalprice, travelers, packageDetails }) => {
   const [submitted, setSubmitted] = useState(false);
   const [formData, setFormData] = useState(null);
-
   const {
     register,
     handleSubmit,
@@ -28,30 +32,43 @@ const ModalForm = ({ closeModal, totalprice}) => {
     resolver: zodResolver(bookingSchema),
   });
 
-  const generateInvoice = (data) => {
-    const { name, email, phone, travelers } = data;
+  const generateInvoice = (data, totalprice, packageDetails) => {
+    const { name, email, phone, travelers, specialRequests } = data;
 
     const doc = new jsPDF();
 
     doc.setFontSize(20);
-    doc.text("Invoice", 20, 20);
+    doc.text('Invoice', 20, 20);
 
     doc.setFontSize(12);
     doc.text(`Customer Name: ${name}`, 20, 30);
     doc.text(`Email: ${email}`, 20, 40);
     doc.text(`Phone: ${phone}`, 20, 50);
-    // doc.text(`Package: ${packageDetails}`, 20, 60);
+    doc.text(`Package: ${packageDetails}`, 20, 60);
     doc.text(`Travelers: ${travelers}`, 20, 70);
-
-    doc.setFontSize(12);
-    doc.text(`Total Price: ₹ ${totalprice * travelers}`, 20, 90);
+    doc.text(`Special Requests: ${specialRequests}`, 20, 80);
+    doc.text(`Total Price: INR ${totalprice}`, 20, 90);
 
     doc.save(`invoice_${name}.pdf`);
   };
 
-  const onSubmit = (data) => {
-    setFormData(data);
-    setSubmitted(true);
+  const onSubmit = async (data) => {
+    try {
+      setFormData(data);
+      const bookingData = {
+        name: data.name,
+        email: data.email,
+        phone: data.phone,
+        numberofTravellers: data.travelers,
+        specialRequest: data.specialRequests,
+        packageId: packageDetails,
+        amountPaid: totalprice,
+      };
+      await axios.post(BASE_URL + '/bookings', bookingData);
+      setSubmitted(true);
+    } catch (error) {
+      toast.error(error.message);
+    }
   };
 
   return (
@@ -60,14 +77,31 @@ const ModalForm = ({ closeModal, totalprice}) => {
         <div className="p-6 bg-white rounded shadow-lg w-96">
           <h2 className="mb-4 text-xl font-bold">Invoice</h2>
           <div>
-            <p><strong>Name:</strong> {formData.name}</p>
-            <p><strong>Email:</strong> {formData.email}</p>
-            <p><strong>Phone:</strong> {formData.phone}</p>
-            {/* <p><strong>Package:</strong> {packageDetails}</p> */}
-            <p><strong>Travelers:</strong> {formData.travelers}</p>
-            <p><strong>Total Price:</strong> ₹ {totalprice * formData.travelers}</p>
+            <p>
+              <strong>Name:</strong> {formData.name}
+            </p>
+            <p>
+              <strong>Email:</strong> {formData.email}
+            </p>
+            <p>
+              <strong>Phone:</strong> {formData.phone}
+            </p>
+            <p>
+              <strong>Package:</strong> {packageDetails}
+            </p>
+            <p>
+              <strong>Travelers:</strong> {formData.travelers}
+            </p>
+            <p>
+              <strong>Special Request:</strong> {formData.specialRequests}
+            </p>
+            <p>
+              <strong>Total Price:</strong> ₹ {totalprice * formData.travelers}
+            </p>
             <button
-              onClick={() => generateInvoice(formData)}
+              onClick={() =>
+                generateInvoice(formData, totalprice, packageDetails)
+              }
               className="px-4 py-2 mt-4 text-white rounded bg-primary_button"
             >
               Download Invoice
@@ -89,43 +123,51 @@ const ModalForm = ({ closeModal, totalprice}) => {
               <label className="block mb-1">Name:</label>
               <input
                 type="text"
-                {...register("name")}
+                {...register('name')}
                 className="w-full px-3 py-2 border rounded"
                 placeholder="Enter your name"
               />
               {errors.name && (
-                <span className="text-sm text-red-500">{errors.name.message}</span>
+                <span className="text-sm text-red-500">
+                  {errors.name.message}
+                </span>
               )}
             </div>
             <div className="mb-4">
               <label className="block mb-1">Email:</label>
               <input
                 type="text"
-                {...register("email")}
+                {...register('email')}
                 className="w-full px-3 py-2 border rounded"
                 placeholder="Enter your email"
               />
               {errors.email && (
-                <span className="text-sm text-red-500">{errors.email.message}</span>
+                <span className="text-sm text-red-500">
+                  {errors.email.message}
+                </span>
               )}
             </div>
             <div className="mb-4">
               <label className="block mb-1">Phone Number:</label>
               <input
                 type="tel"
-                {...register("phone")}
+                {...register('phone')}
                 className="w-full px-3 py-2 border rounded"
                 placeholder="Enter your phone number"
               />
               {errors.phone && (
-                <span className="text-sm text-red-500">{errors.phone.message}</span>
+                <span className="text-sm text-red-500">
+                  {errors.phone.message}
+                </span>
               )}
             </div>
             <div className="mb-4">
               <label className="block mb-1">Number of Travelers:</label>
               <input
+                {...register('travelers', { valueAsNumber: true })}
                 type="number"
-                {...register("travelers", { valueAsNumber: true })}
+                readOnly
+                value={travelers}
                 className="w-full px-3 py-2 border rounded"
                 placeholder="Enter number of travelers"
               />
@@ -138,7 +180,7 @@ const ModalForm = ({ closeModal, totalprice}) => {
             <div className="mb-4">
               <label className="block mb-1">Special Requests:</label>
               <textarea
-                {...register("specialRequests")}
+                {...register('specialRequests')}
                 className="w-full px-3 py-2 border rounded"
                 placeholder="Enter any special requests"
               ></textarea>

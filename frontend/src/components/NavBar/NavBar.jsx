@@ -1,10 +1,13 @@
 import React from 'react';
 import Button from '../Button/Button';
+import { useNavigate } from 'react-router-dom';
+import { Menu } from 'lucide-react';
 
 const NavBar = ({ withImage }) => {
   const nav_items = ['Home', 'About', 'Services', 'Upcoming Packages'];
+  const navigate = useNavigate();
   return (
-    <div className="relative w-screen h-full">
+    <div className="relative w-full h-full ">
       {withImage && (
         <div className="absolute top-0 -z-10">
           <img
@@ -13,15 +16,27 @@ const NavBar = ({ withImage }) => {
           ></img>
         </div>
       )}
-      <nav className="flex items-center justify-around p-4 bg-gradient-to-t from-blue-500/80 to-blue-400">
+      <nav
+        className={`flex items-center justify-between sm:justify-around p-4 ${!withImage && 'bg-gradient-to-t from-blue-500/80 to-blue-400'}`}
+      >
         {' '}
-        <div className="w-[100px]">
-          <img src="src/assets/logo.png" className="object-cover"></img>
+        <Menu className='sm:hidden' color='#FFF' size={30}></Menu>
+        <div className="lg:w-[100px] w-[80px] sm:block hidden">
+          <img
+            src="src/assets/logo.png"
+            onClick={() => {
+              navigate('/');
+            }}
+            className="object-cover hover:cursor-pointer"
+          ></img>
         </div>
-        <ul className="flex gap-6">
+        <ul className="hidden lg:gap-3 xl:gap-6 sm:flex">
           {nav_items.map((item, index) => {
             return (
               <li
+                onClick={() => {
+                  navigate('/');
+                }}
                 key={index}
                 className="text-lg tracking-wide text-white select-none hover:cursor-pointer"
               >
@@ -33,10 +48,10 @@ const NavBar = ({ withImage }) => {
         <Button button_text={'Get In Touch'}></Button>
       </nav>
       {withImage && (
-        <div className="z-10 mt-40 text-white">
+        <div className="z-10 -mt-5 text-white sm:mt-10 xl:mt-40">
           <div className="flex flex-col items-center">
             <div className="text-lg font-bold uppercase">Read</div>
-            <div className="text-[200px] capitalize font-yesteryear">
+            <div className="xl:text-[200px] text-[70px]  capitalize font-yesteryear">
               about Us
             </div>
           </div>
