@@ -44,3 +44,11 @@ export const createBooking = asyncHandler(async (req, res) => {
     .status(200)
     .json(new ApiResponse(201, booking, "Booking created successfully"));
 });
+
+
+export const getBookings = asyncHandler(async (req, res) => {
+  const bookings = await Booking.find({});
+  return res
+    .status(200)
+    .json(new ApiResponse(200, bookings, "All bookings"));
+});

@@ -6,7 +6,7 @@ import {
   getPackages,
   updatePackage,
 } from "../controllers/package.controller.js";
-import { createBooking } from "../controllers/booking.controller.js";
+import { createBooking,getBookings } from "../controllers/booking.controller.js";
 import { upload } from "../middleware/multer.middleware.js";
 
 const router = Router();
@@ -21,5 +21,6 @@ router.post("/bookings", createBooking);
 router.post("/admin/packages", upload.array("image", 5), createPackage);
 router.put("/admin/packages/:id", upload.array("image", 5), updatePackage);
 router.delete("/admin/packages/:id", deletePackage);
+router.get("/bookings", getBookings);
 
 export default router;

@@ -10,7 +10,7 @@ import EditPackage from './Pages/EditPackage';
 const App = () => {
   return (
     <Routes>
-      <Route path="/" element={<HomePage/>}></Route>
+      <Route path="/" element={<HomePage />}></Route>
       <Route path="/:id" element={<DetailedPage />} />
       <Route path="/admin" element={<AdminSignIn></AdminSignIn>}></Route>
       <Route path="/admin/home" element={<AdminPage></AdminPage>}></Route>

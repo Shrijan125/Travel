@@ -1,6 +1,6 @@
 import React from 'react';
 
-const ImageViewer = ({images}) => {
+const ImageViewer = ({ images }) => {
   return (
     <div className="flex h-[600px] w-full gap-2 mt-6">
       <div className="sm:w-[40%] w-full h-full">

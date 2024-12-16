@@ -9,10 +9,10 @@ const OurPackages = () => {
           Our Packages
         </h1>
         <span className="text-2xl font-black tracking-wider sm:text-4xl">
-          Scroll Down <br className='xl:hidden'></br> to Explore
+          Scroll Down <br className="xl:hidden"></br> to Explore
         </span>
         <span className="text-2xl font-black tracking-wider sm:text-4xl whitespace-nowrap">
-          Our Exclusive <br className='xl:hidden'></br> Packages!
+          Our Exclusive <br className="xl:hidden"></br> Packages!
         </span>
       </div>
       <PackageImage></PackageImage>

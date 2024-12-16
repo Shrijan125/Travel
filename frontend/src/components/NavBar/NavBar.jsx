@@ -20,7 +20,7 @@ const NavBar = ({ withImage }) => {
         className={`flex items-center justify-between sm:justify-around p-4 ${!withImage && 'bg-gradient-to-t from-blue-500/80 to-blue-400'}`}
       >
         {' '}
-        <Menu className='sm:hidden' color='#FFF' size={30}></Menu>
+        <Menu className="sm:hidden" color="#FFF" size={30}></Menu>
         <div className="lg:w-[100px] w-[80px] sm:block hidden">
           <img
             src="src/assets/logo.png"

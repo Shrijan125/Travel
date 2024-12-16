@@ -24,7 +24,7 @@ import toast from 'react-hot-toast';
 const DetailedPage = () => {
   const { id } = useParams();
   const [data, setData] = useState({});
-  const [images,setImages] = useState([]);
+  const [images, setImages] = useState([]);
   const [count, setguestCount] = useState(1);
   const [total, setTotal] = useState(0);
   useEffect(() => {

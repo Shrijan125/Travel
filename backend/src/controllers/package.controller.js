@@ -17,6 +17,7 @@ export const getPackageById = asyncHandler(async (req, res) => {
   if (!id) {
     throw new ApiError(400, "Package ID is required");
   }
+
   const packagebyid = await Package.findById(id);
   return res
     .status(200)
