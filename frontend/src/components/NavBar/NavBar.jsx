@@ -11,7 +11,7 @@ const NavBar = ({ withImage }) => {
       {withImage && (
         <div className="absolute top-0 -z-10">
           <img
-            src="src/assets/landing_page.png"
+            src="https://res.cloudinary.com/dkcnv8vgt/image/upload/v1734366669/mr7qzngcvtz3lny9rw0i.png"
             className="object-cover w-full"
           ></img>
         </div>
@@ -23,7 +23,7 @@ const NavBar = ({ withImage }) => {
         <Menu className="sm:hidden" color="#FFF" size={30}></Menu>
         <div className="lg:w-[100px] w-[80px] sm:block hidden">
           <img
-            src="src/assets/logo.png"
+            src="https://res.cloudinary.com/dkcnv8vgt/image/upload/v1734366667/iu549pmst9d1znuhycht.png"
             onClick={() => {
               navigate('/');
             }}

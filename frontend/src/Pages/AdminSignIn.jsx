@@ -16,7 +16,7 @@ const AdminSignIn = () => {
     <div className="flex items-center justify-center w-screen h-screen bg-black">
       <div className="h-[400px] w-[400px] border-[0.5px] border-gray-300 rounded-md p-4">
         <div className="flex items-center justify-center">
-          <img src="/src/assets/logo.png"></img>
+          <img src="https://res.cloudinary.com/dkcnv8vgt/image/upload/v1734366667/iu549pmst9d1znuhycht.png"></img>
         </div>
         <form className="flex flex-col gap-4">
           <div className="flex flex-col gap-1">
